@@ -7,3 +7,6 @@ const LSCS = function (arr) {
     }
     return max
 };
+/*
+O(N)
+*/

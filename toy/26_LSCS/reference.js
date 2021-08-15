@@ -46,3 +46,4 @@ const LSCS = function (arr) {
   
     return max;
   };
+  
