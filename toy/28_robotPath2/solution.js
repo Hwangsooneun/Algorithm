@@ -1,12 +1,12 @@
-// 테스트 케이스 7, 8 미통과
+// 테스트 100%
 const robotPath2 = function (room, src, sDir, dst, dDir) {
     let R = room.length;
     let C = room[0].length;
     const MOVES = [
-    [1, -1, 0], // UP
-    [2, 0, 1], // RIGHT
-    [3, 1, 0], // DOWN
-    [4, 0, -1], // LEFT
+    [1, -1, 0],
+    [2, 0, 1],
+    [3, 1, 0],
+    [4, 0, -1],
     ];
     for (let i = 0; i < R; i++) {
       for (let j = 0; j < C; j++) {
@@ -24,18 +24,11 @@ const robotPath2 = function (room, src, sDir, dst, dDir) {
         return false
       }
     }
-    const rotate = (curR, nextR) => {
+    const rotate = (curD, nextD) => {
       let rot = 0
-      if (curR > nextR) {
-        rot = curR - nextR
-        if (rot > 2) {
-          rot = 1
-        }
-      } else {
-        rot = nextR - curR
-        if (rot > 2) {
-          rot = 1
-        }
+      rot = Math.abs(curD - nextD)
+      if (rot > 2) {
+        rot = 1
       }
       return rot
     }
@@ -52,6 +45,9 @@ const robotPath2 = function (room, src, sDir, dst, dDir) {
       } else {
         return
       }
+      if (count === 0 && dir === nextDir) { // 현재 방향과, 나갈 방향이 같고, 첫걸음이라면 1을 더해줘야 한다.
+        count++
+      }
       count += rot
       if (room[r][c] !== 0) {
         if (room[r][c] > count) {
@@ -62,16 +58,15 @@ const robotPath2 = function (room, src, sDir, dst, dDir) {
       } else {
         room[r][c] = count
       }
-      dir = nextDir
       if (r === dst[0] && c === dst[1]) {
-        let result = rotate(dir, dDir)
+        let result = rotate(nextDir, dDir)
         count += result
         room[r][c] = count
       }
-      aux([r, c], dir, count, MOVES[0]);
-      aux([r, c], dir, count, MOVES[1]);
-      aux([r, c], dir, count, MOVES[2]);
-      aux([r, c], dir, count, MOVES[3]);
+      aux([r, c], nextDir, count, MOVES[0]);
+      aux([r, c], nextDir, count, MOVES[1]);
+      aux([r, c], nextDir, count, MOVES[2]);
+      aux([r, c], nextDir, count, MOVES[3]);
     };
     aux(src, sDir, 0, MOVES[0]);
     aux(src, sDir, 0, MOVES[1]);
@@ -81,5 +76,7 @@ const robotPath2 = function (room, src, sDir, dst, dDir) {
     return room[r][c]
   };
   /*
-  리팩토링 예정.
+  O(N^2)
+  스택, 큐 보다는 재귀를 자주 쓰게 되는 것 같다.
+  중간에 논리가 조금 부족해 테스트를 전부 통과하지 못했지만 결국 해결했다.
   */
