@@ -1,3 +1,4 @@
+// 테스트 100%
 function solution(n, t, m, p) {
     var answer = '';
     let word = '';
@@ -12,3 +13,6 @@ function solution(n, t, m, p) {
     }
     return answer.slice(0, t);
 }
+/*
+쉽구만
+*/
