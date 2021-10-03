@@ -24,6 +24,6 @@ function solution(enter, leave) {
     return answer;
 }
 /*
-O(NlogM)
+O(N^2)
 나가는 함수 모듈화가 모든걸 다한다.
 */
