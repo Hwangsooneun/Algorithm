@@ -1,3 +1,4 @@
+// 런타임
 const decompression = function (image) {
     let answer = '';
     const aux = (len, location) => {
@@ -9,15 +10,6 @@ const decompression = function (image) {
       }
       let check = true
       let half = len / 2
-      // let end = Number(r) + Number(len)
-      // for (let i = r; i < end; i++) {
-      //   for (let j = c; j < end; j++) {
-      //     if (image[i][j] !== curNum) {
-      //       check = false;
-      //       break
-      //     }
-      //   }
-      // }
       let pressNum = String(curNum).repeat(len)
       let compare = image[r].slice(c, c + len).join('')
       if (pressNum === compare) {
@@ -44,4 +36,25 @@ const decompression = function (image) {
     aux(image.length, [0, 0])
     return answer
   };
-  
+  // refactoring
+  const decompression = function (image) {
+    const aux = (len, location) => {
+      const [r, c] = location
+      let curNum = image[r][c]
+      if (len === 1) {
+        return String(curNum)
+      }
+      let half = len / 2
+
+      let leftUp = aux(half, [r, c])
+      let rightUp = aux(half, [r, c + half])
+      let leftDown = aux(half, [r + half, c])
+      let rightDown = aux(half, [r + half, c + half])
+
+      let result = leftUp + rightUp + leftDown + rightDown
+      if (result === '1111') return '1'
+      else if (result === '0000') return '0'
+      else return 'X' + result
+    }
+    return aux(image.length, [0, 0])
+  };
