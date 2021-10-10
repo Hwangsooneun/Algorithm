@@ -57,6 +57,33 @@ function solution(name) {
     }
     return answer
 }
+
+// refactoring
+function solution(name) {
+    if (name.replace(/[A]/g, '').length === 0) return 0
+    var answer = 0;
+    let alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let map = {}
+    for (let i = 0; i < alpha.length; i++) {
+        let location = alpha.indexOf(alpha[i])
+        map[alpha[i]] = Math.min(location, 26 - location)
+    }
+    name = name.split('')
+    let idx = 0
+    let compare = new Array(name.length).fill('A');
+    while (compare.join('') !== name.join('')) {
+        answer += map[name[idx]]
+        compare[idx] = name[idx]
+        let nextName = name.slice(idx + 1)
+        let front = nextName.findIndex(el => el !== 'A') + 1
+        let back = nextName.reverse().findIndex(el => el !== 'A') + idx + 1
+        let moves = front >= back ? back : front;
+        answer += moves
+        idx += front
+    }
+    return answer
+}
 /*
-문제가 이상한가;;
+탐욕법이라는 것에 포인트를 두고 풀어야 통과할 수 있는 문제.
+동기 레퍼런스 참조.
 */
