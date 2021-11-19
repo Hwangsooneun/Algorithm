@@ -63,6 +63,89 @@ function findAbbreviation(strA, strB) {
   }
   return strA.join('') === strB
 }
+// refactoring 테스트 100%
+function findAbbreviation(strA, strB) {
+  strA = strA.split('');
+  let arr = new Array(strA.length).fill(false)
+  let check;
+  let clone = strB.split('')
+  let idx = 0;
+  while (clone.length) {
+    let str = clone.shift()
+    let match;
+    for (let i = idx; i < strA.length; i++) {
+      if (str === strA[i]) {
+        arr[i] = i
+        idx = i
+        match = true
+        break
+      }
+    }
+    if (!match) break
+  }
+  if (clone.length) {
+    idx = 0
+    for (let i = 0; i < strB.length; i++) {
+      check = false
+      for (let j = idx; j < strA.length; j++) {
+        if (strB[i] === strA[j].toUpperCase()) {
+          arr[j] = i
+          idx = j + 1
+          check = true
+          break
+        }
+      }
+      if (!check) return false
+    }
+  }
+  let curIdx = 0
+  let exe1
+  while (arr.length > strB.length) {
+    exe1 = false
+    for (let i = curIdx; i < arr.length; i++) {
+      if (arr[i] !== false && strB[arr[i]] !== strA[i]) {
+        curIdx = i
+        strA[i] = strA[i].toUpperCase()
+        exe1 = true
+        break
+      }
+    }
+    if (!exe1) break
+    let exe2 = false
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] === false) {
+        arr.splice(i, 1)
+        strA.splice(i, 1)
+        exe2 = true
+        break
+      }
+    }
+    if (!exe2) return false
+  }
+  while (arr.length > strB.length) {
+    let exe3 = false;
+    let exe4 = false
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] === false && strA[i] !== strA[i].toUpperCase()) {
+        strA[i] = strA[i].toUpperCase()
+        exe3 = true
+        break
+      }
+    }
+    if (!exe3) break
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] === false) {
+        arr.splice(i, 1)
+        strA.splice(i, 1)
+        exe4 = true
+        break
+      }
+    }
+    if (!exe4) break
+  }
+  return strA.join('') === strB
+}
+
 /*
 1. 먼저 strA가 strB의 문자를 가지고 있는지 체크하며 인덱스를 메모한다.
 2. strA가 strB와 같은 문자열(대문자)가 되기 위한 exe1, 2를 실행한 후
@@ -71,4 +154,7 @@ function findAbbreviation(strA, strB) {
    혹여 두 실행중 하나라도 실행할 수 없을 경우 반복문을 종료한다.
 
  - 정교한 코드를 작성하지 못한듯. 리팩토링 예정.
+refactoring
+strA가 대문자로 주어져 있어서 변환해줄 필요없는 경우와
+0번쨰 인덱스부터 대문자를 변환해야 할 경우를 나누어 실행함.
 */
